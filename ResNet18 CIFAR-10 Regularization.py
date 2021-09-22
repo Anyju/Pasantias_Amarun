@@ -245,6 +245,24 @@ with torch.no_grad():
     
 # Medidas de performance
 
+# Gyardar el checkpoint
+
+best_acc=0
+acc = 100.*correct/total
+if acc > best_acc:
+  print('Saving..')
+  state = {
+    'model': model.state_dict(),
+    'acc': acc,
+    'epoch': epoch,
+    }
+if not os.path.isdir('checkpoint'):
+  os.mkdir('checkpoint')
+  torch.save(state, './checkpoint/ckpt.pth')
+  best_acc = acc
+
+print("The general accuracy is ", best_acc)
+
 # Predicciones por clase 
 
 classes = ('plane', 'car', 'bird', 'cat',
@@ -256,7 +274,7 @@ total_pred = {classname: 0 for classname in classes}
 with torch.no_grad():
     for data in testloader:
         images, labels = data
-        outputs = net(images)
+        outputs = model(images)
         _, predictions = torch.max(outputs, 1)
         # collect the correct predictions for each class
         for label, prediction in zip(labels, predictions):
