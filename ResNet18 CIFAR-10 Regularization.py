@@ -32,8 +32,8 @@ class AddGaussianNoise(object):
 
 transform = transforms.Compose([
     transforms.Pad(4),
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomCrop(32),
+    #transforms.RandomHorizontalFlip(),
+    #transforms.RandomCrop(32),
     transforms.ToTensor(),
     AddGaussianNoise(0., 1.)])
 
@@ -106,15 +106,12 @@ def init_params(net):
     for m in net.modules():
         if isinstance(m, nn.Conv2d):
             init.kaiming_normal(m.weight, mode='fan_out')
-            if m.bias:
-                init.constant(m.bias, 0)
-        elif isinstance(m, nn.BatchNorm2d):
-            init.constant(m.weight, 1)
-            init.constant(m.bias, 0)
-        elif isinstance(m, nn.Linear):
-            init.normal(m.weight, std=1e-3)
-            if m.bias:
-                init.constant(m.bias, 0)
+            # init.kaiming_uniform_(m.weight, a=0, mode='fan_in', nonlinearity='leaky_relu')
+            # init.orthogonal_(m.weight, gain=1)
+            # init.sparse_(m.weight, sparsity=0.1, std=0.01)
+            # init.xavier_normal_(m.weight, gain=1.0)
+            # init.dirac_(m.weight, groups=1)
+# Initialization details given at: https://pytorch.org/docs/stable/nn.init.html
                 
                 
 # Convolucion 3x3
@@ -196,9 +193,9 @@ optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
 # Actualizacion del learning rate
 
-def update_lr(optimizer, lr):    
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
+#def update_lr(optimizer, lr):    
+#    for param_group in optimizer.param_groups:
+#        param_group['lr'] = lr
         
 # Entrenamiento
 
