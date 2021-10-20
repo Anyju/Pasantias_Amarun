@@ -249,7 +249,7 @@ acc = 100.*correct/total
 if acc > best_acc:
   print('Saving..')
   state = {
-    'model': model.state_dict(),
+    'net': model.state_dict(),
     'acc': acc,
     'epoch': epoch,
     }
@@ -269,7 +269,7 @@ correct_pred = {classname: 0 for classname in classes}
 total_pred = {classname: 0 for classname in classes}
 
 with torch.no_grad():
-    for data in testloader:
+    for data in test_loader:
         images, labels = data
         outputs = model(images)
         _, predictions = torch.max(outputs, 1)
